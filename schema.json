@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pai-retina/schema/1.0",
+  "title": "PAI Retina — envelope de saída da avaliação",
+  "description": "Contrato fixo consumido pela LLM de laudo. O envelope é versionado em schema_version; labels/probabilities têm chaves livres definidas pelo checkpoint em tempo de execução.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "exam_id",
+    "timestamp_utc",
+    "schema_version",
+    "inputs",
+    "models",
+    "recommendations",
+    "disclaimer"
+  ],
+  "properties": {
+    "exam_id": { "type": "string", "description": "UUID do exame" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "schema_version": { "type": "string", "const": "1.0" },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/input" }
+    },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/model" }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "disclaimer": { "type": "string", "minLength": 1 }
+  },
+  "definitions": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_id",
+        "filename",
+        "sha256",
+        "original_size",
+        "modality_declared",
+        "modality_estimated",
+        "modality_agreement",
+        "saturation_mean",
+        "preprocessing",
+        "quality_flags"
+      ],
+      "properties": {
+        "input_id": { "type": "string" },
+        "filename": { "type": "string" },
+        "sha256": { "type": "string" },
+        "original_size": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0 },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "modality_declared": { "enum": ["OCT", "FUNDUS"] },
+        "modality_estimated": { "enum": ["OCT", "FUNDUS", "undetermined"] },
+        "modality_agreement": { "type": "boolean" },
+        "saturation_mean": { "type": "number", "minimum": 0, "maximum": 1 },
+        "preprocessing": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "quality_flags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "checkpoint",
+        "task",
+        "modality_expected",
+        "input_id",
+        "status",
+        "labels_source",
+        "labels",
+        "probabilities",
+        "top1",
+        "confidence",
+        "inference_time_ms",
+        "error"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "checkpoint": { "type": "string" },
+        "task": { "type": "string" },
+        "modality_expected": { "enum": ["OCT", "FUNDUS"] },
+        "input_id": { "type": ["string", "null"] },
+        "status": {
+          "enum": ["ok", "no_input", "skipped_modality_mismatch", "error"]
+        },
+        "labels_source": { "enum": ["checkpoint", "manual"] },
+        "labels": {
+          "type": ["array", "null"],
+          "items": { "type": "string" }
+        },
+        "probabilities": {
+          "type": ["object", "null"],
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "top1": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["label", "probability"],
+          "properties": {
+            "label": { "type": "string" },
+            "probability": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "confidence": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["p_max", "margin", "entropy_norm", "level"],
+          "properties": {
+            "p_max": { "type": "number", "minimum": 0, "maximum": 1 },
+            "margin": { "type": "number", "minimum": 0, "maximum": 1 },
+            "entropy_norm": { "type": "number", "minimum": 0, "maximum": 1 },
+            "level": { "enum": ["alta", "média", "baixa"] }
+          }
+        },
+        "inference_time_ms": { "type": ["number", "null"], "minimum": 0 },
+        "error": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

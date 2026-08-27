@@ -1,0 +1,29 @@
+# Segredos, configuração local e auxiliares
+.env
+prompt_PAI-oct.md
+CLAUDE.md
+
+# Pesos de modelos (baixados via HF cache; nunca versionar checkpoints)
+*.pth
+*.pt
+*.ckpt
+
+# Saídas geradas por execução e pastas antigas
+outputs/*
+!outputs/.gitkeep
+*.npy
+old/
+
+# Imagens de trabalho do usuário em data/ (mantém apenas o placeholder)
+data/*
+!data/.gitkeep
+
+# Ambientes e caches Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Artefatos de SO/WSL
+.DS_Store
+
