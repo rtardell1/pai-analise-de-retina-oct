@@ -1,20 +1,16 @@
-# Dependências fixadas do projeto PAI — análise de retina (OCT + RD).
+# Dependências fixadas do projeto PAI — laudo interpretativo de glaucoma a partir de OCT.
 #
-# Modelos carregados via timm (hf_hub:<repo_id>), não via transformers:
-#   - bitfount/RETFound_MAE_OCT_CNV_DME_DRU  (OCT, 4 classes)
-#   - bitfount/RETFound_DR_IDRID             (fundo, 5 graus ICDR)
-# Ambos são ViT-Large/16 (RETFound), licença CC-BY-NC-4.0 (uso não-comercial).
+# pymupdf: leitura e anonimização do PDF do relatório Zeiss Cirrus.
+# numpy/scipy/pillow: o pipeline de imagem (projeções, componentes conexos, geometria).
+# pandas/matplotlib: tabelas e figuras do notebook.
+#
+# Não há dependência de aprendizado de máquina. A avaliação do RETFound que motivou essa
+# decisão está resumida na seção 14 do notebook; o código dela foi removido.
 
-torch==2.12.0
-torchvision==0.27.0
-timm==1.0.27
+pymupdf==1.28.2
 pillow==12.2.0
 numpy==2.4.6
+scipy==1.18.1
 pandas==3.0.3
 matplotlib==3.10.9
-scikit-learn==1.9.0
-huggingface_hub==0.36.2
-jsonschema==4.26.0
-python-dotenv==1.2.3
-ipywidgets==8.1.9
 ipykernel==7.3.0

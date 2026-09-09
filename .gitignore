@@ -1,22 +1,19 @@
-# Segredos, configuração local e auxiliares
-.env
+# Configuração local e auxiliares de autoria
 prompt_PAI-oct.md
 CLAUDE.md
 
-# Pesos de modelos (baixados via HF cache; nunca versionar checkpoints)
+# Pesos de modelos (baixados no cache do HF; nunca versionar checkpoints)
 *.pth
 *.pt
 *.ckpt
-
-# Saídas geradas por execução e pastas antigas
-outputs/*
-!outputs/.gitkeep
 *.npy
+
+# Notebooks e material das versões anteriores do projeto
 old/
 
-# Imagens de trabalho do usuário em data/ (mantém apenas o placeholder)
-data/*
-!data/.gitkeep
+# Laudos originais, sem tarja (contêm identificadores).
+# Em imagens/ ficam as versões tarjadas, que são as versionadas.
+imagens_originais/
 
 # Ambientes e caches Python
 .venv/
@@ -26,4 +23,4 @@ __pycache__/
 
 # Artefatos de SO/WSL
 .DS_Store
-
+*:Zone.Identifier
